@@ -1,7 +1,6 @@
 package com.ct.first.test;
 
 import com.ct.first.BaseTest;
-import com.ct.framework.config.TestConfig;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -10,9 +9,8 @@ public class FirstTest extends BaseTest {
 
     @Test
     public void shouldAnswerWithTrue() {
-        driver.get("https://www.youtube.com/");
         String title = driver.getTitle();
-        Assert.assertEquals(title, "YouTube");
+        Assert.assertEquals(title, "OWASP Juice Shop");
     }
 
     @Test
