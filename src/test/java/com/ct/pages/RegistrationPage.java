@@ -26,16 +26,4 @@ public class RegistrationPage {
     private String loginPageLinkCss = "[href='#/login']";
     private String loginPageLinkXpath = "//a[@href='#/login']";
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

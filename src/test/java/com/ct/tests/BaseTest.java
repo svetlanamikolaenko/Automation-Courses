@@ -1,4 +1,4 @@
-package com.ct.first;
+package com.ct.tests;
 
 import com.ct.framework.driver.WebDriverRunner;
 import org.openqa.selenium.WebDriver;

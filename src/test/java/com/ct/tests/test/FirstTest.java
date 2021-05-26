@@ -1,6 +1,6 @@
-package com.ct.first.test;
+package com.ct.tests.test;
 
-import com.ct.first.BaseTest;
+import com.ct.tests.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
