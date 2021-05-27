@@ -1,6 +1,7 @@
 package com.ct.tests;
 
 import com.ct.framework.driver.WebDriverRunner;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
@@ -23,7 +24,9 @@ public class BaseTest {
     }
 
     @BeforeClass
-    public void openSite(){
+    public void openSite() throws InterruptedException {
         driver.get("http://beeb0b73705f.sn.mynetname.net:3000/#/");
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//button[@aria-label='Close Welcome Banner']")).click();
     }
 }
