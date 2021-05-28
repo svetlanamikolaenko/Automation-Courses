@@ -35,8 +35,6 @@ public class LoginTest extends BaseTest {
                 .build()
                 .perform();
         driver.navigate().refresh();
-
-
     }
 
     @Test
