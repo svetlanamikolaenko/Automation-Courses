@@ -15,7 +15,7 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
     private String passwordRepeatField = "//input[@aria-label='Field to confirm the password']";
     private String securityQuestionPicklist = "//*[@name='securityQuestion']";
     private String answerField = "//input[contains(@data-placeholder,'Answer')]";
-    private String registerButton = "//button[@id='registerButton']/span[@class = 'mat-button-wrapper']";
+    private String registerButton = "//button[@id='registerButton']";
     private String errorUniqueUser = "//div[@class = 'error']";
     private String accountButton = "//button[@id='navbarAccount']";
 
