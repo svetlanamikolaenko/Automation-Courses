@@ -31,10 +31,9 @@ public class RegistrationTest extends BaseTest  {
     }
 
     @AfterMethod
-    public void loginAfterRegistration() throws InterruptedException {
-        driver.findElement(By.id("email")).sendKeys(email);
-        driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("loginButton")).click();
+    public void refreshPage() throws InterruptedException {
+        driver.navigate().refresh();
+        ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
     }
 
     @Test
@@ -61,5 +60,40 @@ public class RegistrationTest extends BaseTest  {
         softAssert.assertEquals(title, "Login", "The page title is " + title);
         softAssert.assertEquals(registerSuccessMessage,
                 "Registration completed successfully. You can now log in.", "User is already exists and not unique");
+        driver.findElement(By.id("email")).sendKeys(email);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("loginButton")).click();
+        Thread.sleep(2000);
+        driver.findElement(By.xpath(accountButton)).click();
+        Thread.sleep(5000);
+        softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void customerCanLoginAfterRegisterTest() throws InterruptedException {
+        SoftAssert softAssert = new SoftAssert();
+        driver.findElement(By.xpath(emailField)).sendKeys(email);
+        driver.findElement(By.xpath(passwordField)).sendKeys(password);
+        driver.findElement(By.xpath(passwordRepeatField)).sendKeys(password);
+        driver.findElement(By.xpath(securityQuestionPicklist)).click();
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                driver.findElement(By.xpath("//span[contains(.,'Your eldest siblings middle name?')]")));;
+
+        driver.findElement(By.xpath(answerField)).sendKeys("2468");
+        Thread.sleep(2000);
+        driver.findElement(By.xpath(registerButton)).click();
+        Thread.sleep(5000);
+        String title = driver.findElement(By.xpath("//h1")).getText();
+        softAssert.assertEquals(title, "Login", "The page title is " + title);
+        driver.findElement(By.id("email")).sendKeys(email);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("loginButton")).click();
+        Thread.sleep(2000);
+        driver.findElement(By.xpath(accountButton)).click();
+        Thread.sleep(5000);
+        softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
+        softAssert.assertAll();
     }
 }
