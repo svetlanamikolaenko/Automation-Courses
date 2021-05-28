@@ -28,7 +28,6 @@ public class LoginTest extends BaseTest {
 
     @AfterMethod
     public void logout() {
-        driver.navigate().refresh();
         ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
     }
 

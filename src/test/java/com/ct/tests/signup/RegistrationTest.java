@@ -31,9 +31,9 @@ public class RegistrationTest extends BaseTest  {
     }
 
     @AfterMethod
-    public void refreshPage() throws InterruptedException {
-        driver.navigate().refresh();
+    public void refreshPage()  {
         ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
+        driver.navigate().refresh();
     }
 
     @Test
