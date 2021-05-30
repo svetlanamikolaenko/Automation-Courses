@@ -4,6 +4,8 @@ import com.ct.tests.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -22,8 +24,11 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
     String existingEmail;
     String password;
 
+    WebDriverWait wait;
+
     @BeforeMethod
     public void openSignUpPage() {
+        wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
         driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
         driver.findElement(By.xpath("//a[@href='#/register']")).click();
@@ -38,7 +43,8 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
     }
 
     @Test
-    public void emailMustBeUniqueErrorTest() throws InterruptedException {
+    public void emailMustBeUniqueErrorTest() {
+        SoftAssert softAssert = new SoftAssert();
         driver.findElement(By.xpath(emailField)).clear();
         driver.findElement(By.xpath(emailField)).sendKeys(existingEmail);
         driver.findElement(By.xpath(passwordField)).clear();
@@ -46,17 +52,19 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
         driver.findElement(By.xpath(passwordRepeatField)).clear();
         driver.findElement(By.xpath(passwordRepeatField)).sendKeys(password);
         driver.findElement(By.xpath(securityQuestionPicklist)).click();
-        Thread.sleep(5000);
 
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,\"What's your favorite place to go hiking?\")]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
                 driver.findElement(By.xpath("//span[contains(.,\"What's your favorite place to go hiking?\")]")));
 
         driver.findElement(By.xpath(answerField)).clear();
         driver.findElement(By.xpath(answerField)).sendKeys("any text");
-        Thread.sleep(2000);
+        String message =  "//span[contains(.,'Language has been changed to English')]";
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(message)));
+        softAssert.assertTrue(driver.findElement(By.xpath(registerButton)).isEnabled());
         driver.findElement(By.xpath(registerButton)).click();
-        Thread.sleep(5000);
-        Assert.assertEquals(driver.findElement(By.xpath(errorUniqueUser)).getText(),
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorUniqueUser)));
+        softAssert.assertEquals(driver.findElement(By.xpath(errorUniqueUser)).getText(),
                 "Email must be unique", "Email is unique. User not exists!");
     }
 
@@ -66,28 +74,28 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
         driver.findElement(By.xpath(emailField)).clear();
         driver.findElement(By.xpath(emailField)).sendKeys(Keys.TAB);
         String error = "//input[contains(@aria-label,'Email')]/ancestor::div[contains(@class, 'mat-form')]//mat-error";
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(error)));
         softAssert.assertEquals(driver.findElement(By.xpath(error)).getText(), "Please provide an email address.");
         driver.findElement(By.xpath(emailField)).click();
         driver.findElement(By.xpath(emailField)).sendKeys("abc");
         driver.findElement(By.xpath(emailField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(error)));
         softAssert.assertEquals(driver.findElement(By.xpath(error)).getText(), "Email address is not valid.");
         softAssert.assertAll();
     }
 
     @Test
-    public void checkErrorMessagesUnderPasswordFieldTest() throws InterruptedException {
+    public void checkErrorMessagesUnderPasswordFieldTest() {
         SoftAssert softAssert = new SoftAssert();
         driver.findElement(By.xpath(passwordField)).clear();
         driver.findElement(By.xpath(passwordField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
         String errorPassword = "//input[contains(@aria-label,'password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error";
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorPassword)));
         softAssert.assertEquals(driver.findElement(By.xpath(errorPassword)).getText(), "Please provide a password.");
         driver.findElement(By.xpath(passwordField)).click();
         driver.findElement(By.xpath(passwordField)).sendKeys("pass");
         driver.findElement(By.xpath(passwordField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorPassword)));
         softAssert.assertEquals(driver.findElement(By.xpath(errorPassword)).getText(), "Password must be 5-20 characters long.");
         softAssert.assertAll();
     }
@@ -97,33 +105,33 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         driver.findElement(By.xpath(passwordRepeatField)).clear();
         driver.findElement(By.xpath(passwordRepeatField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
         String errorPassword = "//input[contains(@aria-label,'Field to confirm the password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error";
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorPassword)));
         softAssert.assertEquals(driver.findElement(By.xpath(errorPassword)).getText(), "Please repeat your password.");
         driver.findElement(By.xpath(passwordField)).sendKeys(password);
         driver.findElement(By.xpath(passwordRepeatField)).click();
         driver.findElement(By.xpath(passwordRepeatField)).sendKeys("pass");
         driver.findElement(By.xpath(passwordField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorPassword)));
         softAssert.assertEquals(driver.findElement(By.xpath(errorPassword)).getText(), "Passwords do not match");
         softAssert.assertAll();
     }
 
     @Test
-    public void checkErrorMessageUnderSecurityQuestionFieldTest() throws InterruptedException {
+    public void checkErrorMessageUnderSecurityQuestionFieldTest() {
         driver.findElement(By.xpath(securityQuestionPicklist)).click();
         driver.findElement(By.xpath(securityQuestionPicklist)).sendKeys(Keys.ESCAPE);
-        Thread.sleep(2000);
         String errorMessage = "//*[@name='securityQuestion']/ancestor::div[contains(@class, 'mat-form')]//mat-error";
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorMessage)));
         Assert.assertEquals(driver.findElement(By.xpath(errorMessage)).getText(), "Please select a security question.");
     }
 
     @Test
-    public void checkErrorMessagesUnderAnswerFieldTest() throws InterruptedException {
+    public void checkErrorMessagesUnderAnswerFieldTest() {
         driver.findElement(By.xpath(answerField)).clear();
         driver.findElement(By.xpath(answerField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
         String errorMessage = "//input[contains(@data-placeholder,'Answer')]/ancestor::div[contains(@class, 'mat-form')]//mat-error";
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorMessage)));
         Assert.assertEquals(driver.findElement(By.xpath(errorMessage)).getText(), "Please provide an answer to your security question.");
     }
 }

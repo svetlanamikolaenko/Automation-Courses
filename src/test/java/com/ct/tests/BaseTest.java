@@ -3,6 +3,8 @@ package com.ct.tests;
 import com.ct.framework.driver.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
@@ -10,6 +12,7 @@ import org.testng.annotations.BeforeSuite;
 public class BaseTest {
 
     protected WebDriver driver;
+    WebDriverWait wait;
 
     @BeforeSuite
     public void setup(){
@@ -24,9 +27,10 @@ public class BaseTest {
     }
 
     @BeforeClass
-    public void openSite() throws InterruptedException {
+    public void openSite() {
+        wait = new WebDriverWait(driver, 5);
         driver.get("http://beeb0b73705f.sn.mynetname.net:3000/#/");
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@aria-label='Close Welcome Banner']")));
         driver.findElement(By.xpath("//button[@aria-label='Close Welcome Banner']")).click();
     }
 }

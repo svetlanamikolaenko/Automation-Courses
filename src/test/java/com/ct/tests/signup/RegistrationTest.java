@@ -4,6 +4,9 @@ import com.ct.tests.BaseTest;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
@@ -19,10 +22,12 @@ public class RegistrationTest extends BaseTest  {
 
     String email;
     String password;
+    WebDriverWait wait;
 
     @BeforeMethod
     public void openSignUpPage() {
         Faker faker = new Faker();
+        wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
         driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
         driver.findElement(By.xpath("//a[@href='#/register']")).click();
@@ -37,7 +42,7 @@ public class RegistrationTest extends BaseTest  {
     }
 
     @Test
-    public void customerCanRegisterTest() throws InterruptedException {
+    public void customerCanRegisterTest(){
         SoftAssert softAssert = new SoftAssert();
         driver.findElement(By.xpath(emailField)).clear();
         driver.findElement(By.xpath(emailField)).sendKeys(email);
@@ -52,10 +57,13 @@ public class RegistrationTest extends BaseTest  {
 
         driver.findElement(By.xpath(answerField)).clear();
         driver.findElement(By.xpath(answerField)).sendKeys("2468");
-        Thread.sleep(2000);
+        String message =  "//span[contains(.,'Language has been changed to English')]";
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(message)));
         driver.findElement(By.xpath(registerButton)).click();
-        Thread.sleep(5000);
-        String title = driver.findElement(By.xpath("//h1")).getText();
+
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1"), "Login"));
+        String title = driver.findElement(By.xpath("//h1")).getText();;
+
         String registerSuccessMessage = driver.findElement(By.xpath("//span[contains(.,'Registration completed')]")).getText();
         softAssert.assertEquals(title, "Login", "The page title is " + title);
         softAssert.assertEquals(registerSuccessMessage,
@@ -63,16 +71,15 @@ public class RegistrationTest extends BaseTest  {
         driver.findElement(By.id("email")).sendKeys(email);
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.id("loginButton")).click();
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.textToBe(By.xpath("//div[contains(@class , 'heading')]"), "All Products"));
         driver.findElement(By.xpath(accountButton)).click();
-        Thread.sleep(5000);
+        wait.until(ExpectedConditions.textToBe(By.xpath("//button[@aria-label='Go to user profile']/span"), email));
         softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
         softAssert.assertAll();
     }
 
     @Test
-    public void customerCanLoginAfterRegisterTest() throws InterruptedException {
-        SoftAssert softAssert = new SoftAssert();
+    public void customerCanLoginAfterRegisterTest() {
         driver.findElement(By.xpath(emailField)).sendKeys(email);
         driver.findElement(By.xpath(passwordField)).sendKeys(password);
         driver.findElement(By.xpath(passwordRepeatField)).sendKeys(password);
@@ -82,18 +89,16 @@ public class RegistrationTest extends BaseTest  {
                 driver.findElement(By.xpath("//span[contains(.,'Your eldest siblings middle name?')]")));;
 
         driver.findElement(By.xpath(answerField)).sendKeys("2468");
-        Thread.sleep(2000);
+        String message =  "//span[contains(.,'Language has been changed to English')]";
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(message)));
         driver.findElement(By.xpath(registerButton)).click();
-        Thread.sleep(5000);
-        String title = driver.findElement(By.xpath("//h1")).getText();
-        softAssert.assertEquals(title, "Login", "The page title is " + title);
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1"), "Login"));
         driver.findElement(By.id("email")).sendKeys(email);
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.id("loginButton")).click();
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.textToBe(By.xpath("//div[contains(@class , 'heading')]"), "All Products"));
         driver.findElement(By.xpath(accountButton)).click();
-        Thread.sleep(5000);
-        softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
-        softAssert.assertAll();
+        wait.until(ExpectedConditions.textToBe(By.xpath("//button[@aria-label='Go to user profile']/span"), email));
+        Assert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
     }
 }

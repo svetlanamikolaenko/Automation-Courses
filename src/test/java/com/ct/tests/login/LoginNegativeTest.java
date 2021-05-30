@@ -4,6 +4,8 @@ import com.ct.tests.BaseTest;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -15,12 +17,16 @@ public class LoginNegativeTest extends BaseTest {
     private String loginButton = "//button[@id='loginButton']";
     private String accountButton  = "//button[@id='navbarAccount']";
 
+
     String email;
     String password;
+
+    WebDriverWait wait;
 
     @BeforeMethod
     public void openSignUpPage() {
         Faker faker = new Faker();
+        wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
         driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
         email = faker.name().username() + "gmail.com";
@@ -28,28 +34,28 @@ public class LoginNegativeTest extends BaseTest {
     }
 
     @Test
-    public void loginWithNotValidEmailTest() throws InterruptedException {
+    public void loginWithNotValidEmailTest()  {
         driver.findElement(By.xpath(emailField)).clear();
         driver.findElement(By.xpath(emailField)).sendKeys(email);
         driver.findElement(By.xpath(passwordField)).clear();
         driver.findElement(By.xpath(passwordField)).sendKeys(password);
         driver.findElement(By.xpath(loginButton)).click();
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class , 'error')]")));
         Assert.assertEquals(driver.findElement(By.xpath("//div[contains(@class , 'error')]")).getText(), "Invalid email or password.");
     }
 
     @Test
-    public void checkErrorMessageUnderPasswordFieldTest() throws InterruptedException {
+    public void checkErrorMessageUnderPasswordFieldTest() {
         driver.findElement(By.xpath(emailField)).clear();
         driver.findElement(By.xpath(emailField)).sendKeys(email);
         driver.findElement(By.xpath(passwordField)).clear();
         driver.findElement(By.xpath(passwordField)).sendKeys(Keys.TAB);
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-error")));
         Assert.assertEquals(driver.findElement(By.xpath("//mat-error")).getText(), "Please provide a password.");
     }
 
     @Test
-    public void checkLoginButtonIsDisabledTest() throws InterruptedException {
+    public void checkLoginButtonIsDisabledTest() {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(driver.findElement(By.xpath(loginButton)).getAttribute("disabled").contains("true"));
         softAssert.assertFalse(driver.findElement(By.xpath(loginButton)).isEnabled());
@@ -57,7 +63,7 @@ public class LoginNegativeTest extends BaseTest {
         driver.findElement(By.xpath(emailField)).sendKeys(email);
         driver.findElement(By.xpath(passwordField)).clear();
         driver.findElement(By.xpath(passwordField)).sendKeys(password);
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(loginButton)));
         softAssert.assertTrue(driver.findElement(By.xpath(loginButton)).isEnabled());
         softAssert.assertAll();
     }

@@ -3,7 +3,8 @@ package com.ct.tests.login;
 import com.ct.tests.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -18,8 +19,11 @@ public class LoginTest extends BaseTest {
     String email;
     String password;
 
+    WebDriverWait wait;
+
     @BeforeMethod
     public void openSignUpPage() {
+        wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
         driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
         email = "svitlana14@gmail.com";
@@ -32,7 +36,7 @@ public class LoginTest extends BaseTest {
     }
 
     @Test
-    public void userCanLoginTest() throws InterruptedException {
+    public void userCanLoginTest() {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(driver.findElement(By.xpath("//h1")).getText(), "Login");
         driver.findElement(By.xpath(emailField)).clear();
@@ -40,10 +44,10 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.xpath(passwordField)).clear();
         driver.findElement(By.xpath(passwordField)).sendKeys(password);
         driver.findElement(By.xpath(loginButton)).click();
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class , 'heading')]")));
         softAssert.assertEquals(driver.findElement(By.xpath("//div[contains(@class , 'heading')]")).getText(), "All Products");
         driver.findElement(By.xpath(accountButton)).click();
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.textToBe(By.xpath("//button[@aria-label='Go to user profile']/span"), email));
         softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
         softAssert.assertAll();
     }
