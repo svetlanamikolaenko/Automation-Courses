@@ -12,7 +12,7 @@ import org.testng.annotations.BeforeSuite;
 public class BaseTest {
 
     protected WebDriver driver;
-    WebDriverWait wait;
+    protected WebDriverWait wait;
 
     @BeforeSuite
     public void setup(){

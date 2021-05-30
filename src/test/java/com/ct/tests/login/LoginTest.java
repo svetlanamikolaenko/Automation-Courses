@@ -19,8 +19,6 @@ public class LoginTest extends BaseTest {
     String email;
     String password;
 
-    WebDriverWait wait;
-
     @BeforeMethod
     public void openSignUpPage() {
         wait = new WebDriverWait(driver, 5);
