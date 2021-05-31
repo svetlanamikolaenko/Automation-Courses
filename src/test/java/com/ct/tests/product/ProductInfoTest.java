@@ -25,11 +25,13 @@ public class ProductInfoTest extends BaseTest {
         String bananaJuicePrice = driver.findElement(By.xpath(bananaJuiceItem + itemPrice)).getText();
         String bananaJuiceImage = driver.findElement(By.xpath( bananaJuiceItem + itemImage)).getAttribute("src");
         driver.findElement(By.xpath(bananaJuiceItem)).click();
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(card)));
         String bananaJuiceNameInCard = driver.findElement(By.xpath(nameInCard)).getText();
         String bananaJuicePriceInCard = driver.findElement(By.xpath(priceInCard)).getText();
         String bananaJuiceImageInCard = driver.findElement(By.xpath(imageInCard)).getAttribute("src");
         String bananaJuiceDescriptionInCard = driver.findElement(By.xpath(descriptionInCard)).getText();
+
         softAssert.assertEquals(bananaJuiceNameInCard, bananaJuiceName);
         softAssert.assertEquals(bananaJuicePriceInCard, bananaJuicePrice);
         softAssert.assertEquals(bananaJuiceImageInCard, bananaJuiceImage);

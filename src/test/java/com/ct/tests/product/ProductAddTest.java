@@ -46,13 +46,17 @@ public class ProductAddTest extends BaseTest {
         wait.until(ExpectedConditions.textToBe(By.xpath("//div[contains(@class , 'heading')]"), "All Products"));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(applePomaceItem)));
         driver.findElement(By.xpath(applePomaceItem + addToBasket)).click();
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'Apple Pomace')]")));
         softAssert.assertEquals(driver.findElement(By.xpath("//span[contains(.,'Apple Pomace')]")).getText(), "Placed Apple Pomace into basket.");
+
         driver.findElement(By.xpath(basketButton)).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//mat-row")));
         softAssert.assertEquals(driver.findElement(By.xpath("//mat-cell[contains(.,'" + applePomace + "')]")).getText(), applePomace);
+
         driver.findElement(By.xpath("//mat-cell[contains(., 'Apple Pomace')]//following-sibling::mat-cell[last()]")).click();
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//mat-cell")));
+        softAssert.assertAll();
     }
 
     @Test
@@ -60,19 +64,23 @@ public class ProductAddTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         wait.until(ExpectedConditions.textToBe(By.xpath("//div[contains(@class , 'heading')]"), "All Products"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)", driver.findElement(By.xpath("//button[@aria-label='Next page']")));
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(nextPageButton)));
         driver.findElement(By.xpath(nextPageButton)).click();
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(juiceShopCoasterItem)));
         softAssert.assertEquals(driver.findElement(By.xpath(juiceShopCoasterItem + soldOut)).getText(), "Sold Out");
+
         driver.findElement(By.xpath(juiceShopCoasterItem + addToBasket)).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(outOfStockErrorMessage)));
         softAssert.assertEquals(driver.findElement(By.xpath(outOfStockErrorMessage)).getText(), "We are out of stock! Sorry for the inconvenience.");
+
         driver.findElement(By.xpath(basketButton)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-table")));
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(outOfStockErrorMessage)));
         softAssert.assertFalse(driver.findElement(By.xpath("//button[@id='checkoutButton']")).isEnabled(), "Check items in the basket!");
         softAssert.assertEquals(driver.findElement(By.xpath("//div[@id='price']")).getText(), "Total Price: 0¤");
-        System.out.println("Check total price " + driver.findElement(By.xpath("//div[@id='price']")).getText());
         softAssert.assertAll();
     }
 }
