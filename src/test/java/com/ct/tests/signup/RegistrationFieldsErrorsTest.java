@@ -20,17 +20,15 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
     private String registerButton = "//button[@id='registerButton']";
     private String errorUniqueUser = "//div[@class = 'error']";
     private String accountButton = "//button[@id='navbarAccount']";
+    private String loginNavButton = "//button[@id='navbarLoginButton']";
 
     String existingEmail;
     String password;
 
-    WebDriverWait wait;
-
     @BeforeMethod
     public void openSignUpPage() {
-        wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
-        driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
+        driver.findElement(By.xpath(loginNavButton)).click();
         driver.findElement(By.xpath("//a[@href='#/register']")).click();
         existingEmail = "svitlana8@gmail.com";
         password = "passw0rd";
@@ -54,8 +52,7 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
         driver.findElement(By.xpath(securityQuestionPicklist)).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,\"What's your favorite place to go hiking?\")]")));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-                driver.findElement(By.xpath("//span[contains(.,\"What's your favorite place to go hiking?\")]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(By.xpath("//span[contains(.,\"What's your favorite place to go hiking?\")]")));
 
         driver.findElement(By.xpath(answerField)).clear();
         driver.findElement(By.xpath(answerField)).sendKeys("any text");
@@ -105,6 +102,7 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         driver.findElement(By.xpath(passwordRepeatField)).clear();
         driver.findElement(By.xpath(passwordRepeatField)).sendKeys(Keys.TAB);
+
         String errorPassword = "//input[contains(@aria-label,'Field to confirm the password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error";
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(errorPassword)));
         softAssert.assertEquals(driver.findElement(By.xpath(errorPassword)).getText(), "Please repeat your password.");

@@ -15,6 +15,7 @@ public class LoginTest extends BaseTest {
     private String passwordField = "//input[@name='password']";
     private String loginButton = "//button[@id='loginButton']";
     private String accountButton  = "//button[@id='navbarAccount']";
+    private String loginNavButton  = "//button[@id='navbarLoginButton']";
 
     String email;
     String password;
@@ -23,8 +24,8 @@ public class LoginTest extends BaseTest {
     public void openSignUpPage() {
         wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
-        driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
-        email = "svitlana14@gmail.com";
+        driver.findElement(By.xpath(loginNavButton)).click();
+        email = "svitlana8@gmail.com";
         password = "passw0rd";
     }
 

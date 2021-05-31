@@ -2,6 +2,7 @@ package com.ct.tests;
 
 import com.ct.framework.driver.WebDriverRunner;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,6 +32,8 @@ public class BaseTest {
         wait = new WebDriverWait(driver, 5);
         driver.get("http://beeb0b73705f.sn.mynetname.net:3000/#/");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@aria-label='Close Welcome Banner']")));
-        driver.findElement(By.xpath("//button[@aria-label='Close Welcome Banner']")).click();
+        driver.manage().addCookie( new Cookie("welcomebanner_status", "dismiss"));
+        driver.manage().addCookie( new Cookie("cookieconsent_status", "dismiss"));
+        driver.navigate().refresh();
     }
 }

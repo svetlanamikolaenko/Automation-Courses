@@ -5,7 +5,6 @@ import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -16,19 +15,17 @@ public class LoginNegativeTest extends BaseTest {
     private String passwordField = "//input[@name='password']";
     private String loginButton = "//button[@id='loginButton']";
     private String accountButton  = "//button[@id='navbarAccount']";
+    private String loginNavButton  = "//button[@id='navbarLoginButton']";
 
 
     String email;
     String password;
 
-    WebDriverWait wait;
-
     @BeforeMethod
     public void openSignUpPage() {
         Faker faker = new Faker();
-        wait = new WebDriverWait(driver, 5);
         driver.findElement(By.xpath(accountButton)).click();
-        driver.findElement(By.xpath("//button[@id='navbarLoginButton']")).click();
+        driver.findElement(By.xpath(loginNavButton)).click();
         email = faker.name().username() + "gmail.com";
         password = faker.code().ean8();
     }
