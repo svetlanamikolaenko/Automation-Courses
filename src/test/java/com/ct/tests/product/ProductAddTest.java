@@ -4,6 +4,7 @@ import com.ct.tests.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -69,11 +70,9 @@ public class ProductAddTest extends BaseTest {
         driver.findElement(By.xpath(nextPageButton)).click();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(juiceShopCoasterItem)));
-        softAssert.assertEquals(driver.findElement(By.xpath(juiceShopCoasterItem + soldOut)).getText(), "Sold Out");
-
         driver.findElement(By.xpath(juiceShopCoasterItem + addToBasket)).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(outOfStockErrorMessage)));
-        softAssert.assertEquals(driver.findElement(By.xpath(outOfStockErrorMessage)).getText(), "We are out of stock! Sorry for the inconvenience.");
+        Assert.assertEquals(driver.findElement(By.xpath(outOfStockErrorMessage)).getText(), "We are out of stock! Sorry for the inconvenience.", "Chosen item is not sold out!");
 
         driver.findElement(By.xpath(basketButton)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-table")));
