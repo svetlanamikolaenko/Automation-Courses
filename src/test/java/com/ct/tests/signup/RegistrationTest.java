@@ -66,14 +66,6 @@ public class RegistrationTest extends BaseTest  {
         softAssert.assertEquals(title, "Login", "The page title is " + title);
         softAssert.assertEquals(registerSuccessMessage,
                 "Registration completed successfully. You can now log in.", "User is already exists and not unique");
-        driver.findElement(By.id("email")).sendKeys(email);
-        driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("loginButton")).click();
-        wait.until(ExpectedConditions.textToBe(By.xpath("//div[contains(@class , 'heading')]"), "All Products"));
-        driver.findElement(By.xpath(accountButton)).click();
-        wait.until(ExpectedConditions.textToBe(By.xpath("//button[@aria-label='Go to user profile']/span"), email));
-        softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
-        softAssert.assertAll();
     }
 
     @Test
