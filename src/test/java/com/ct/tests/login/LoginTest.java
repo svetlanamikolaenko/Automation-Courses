@@ -28,10 +28,11 @@ public class LoginTest extends BaseTest {
     }
 
     @Test
-    public void userCanLoginTest() throws InterruptedException {
+    public void userCanLoginTest(){
         String pageCaption = loginPage.getPageCaption();
         Assert.assertEquals(pageCaption, "Login");
         loginPage.loginAs(customer);
+        loginPage.clickOnAccountButton();
         String profilePageHeading = loginPage.getActualHeading();
         Assert.assertEquals(profilePageHeading, "All Products");
         String actualAccountName = loginPage.getActualAccountName(customer.getEmail());

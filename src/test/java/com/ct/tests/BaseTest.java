@@ -17,6 +17,7 @@ public class BaseTest {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+    protected String BASE_PAGE = TestConfig.CONFIG.baseUrl();
 
     @BeforeSuite
     public void setup(){
@@ -32,7 +33,8 @@ public class BaseTest {
 
     @BeforeClass
     public void openSite(){
-        driver.get(TestConfig.CONFIG.baseUrl());
+        driver.get(BASE_PAGE);
+        wait = new WebDriverWait(driver, 10);
         driver.manage().addCookie(new Cookie("welcomebanner_status", "dismiss"));
         driver.manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
         driver.navigate().refresh();

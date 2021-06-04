@@ -1,7 +1,6 @@
 package com.ct.framework.pages;
 
 import com.ct.model.Customer;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends AbstractPage {
-    WebDriverWait wait;
 
     @FindBy(xpath = "//input[@name='email']")
     private WebElement emailField;
@@ -45,12 +43,6 @@ public class LoginPage extends AbstractPage {
 
     public void openPage() {
         driver.get(BASE_PAGE + "/login");
-    }
-
-    public void setCookies() {
-        driver.manage().addCookie(new Cookie("welcomebanner_status", "dismiss"));
-        driver.manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
-        driver.navigate().refresh();
     }
 
     public void navigateToLoginPage() {
@@ -97,6 +89,5 @@ public class LoginPage extends AbstractPage {
         enterEmail(customer.getEmail());
         enterPassword(customer.getPassword());
         clickOnLoginButton();
-        clickOnAccountButton();
     }
 }

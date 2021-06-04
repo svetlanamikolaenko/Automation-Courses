@@ -1,29 +1,89 @@
 package com.ct.framework.pages;
 
-public class RegistrationPage {
-    private String emailFieldCss =  "[aria-label^='Email']";
-    private String emailFieldXpath = "//input[contains(@aria-label,'Email')]";
+import com.ct.model.Customer;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-    private String passwordFieldCss =  "[aria-label='Field for the password']";
-    private String passwordFieldXpath = "//input[@aria-label='Field for the password']";
+public class RegistrationPage extends AbstractPage {
+    private String emailField = "//input[contains(@aria-label,'Email')]";
+    private String passwordField = "//input[@aria-label='Field for the password']";
+    private String passwordRepeatField = "//input[@aria-label='Field to confirm the password']";
+    private String securityQuestionPicklist = "//*[@name='securityQuestion']";
+    private String answerField = "//input[contains(@data-placeholder,'Answer')]";
+    private String registerButton = "//button[@id='registerButton']";
+    private String accountButton = "//button[@id='navbarAccount']";
+    private String loginNavButton = "//button[@id='navbarLoginButton']";
+    private LoginPage LoginPage;
 
-    private String passwordRepeatFieldCss =  "[aria-label='Field to confirm the password']";
-    private String passwordRepeatFieldXpath = "//input[@aria-label='Field to confirm the password']";
+    public RegistrationPage(WebDriver driver) {
+        super(driver);
+        wait = new WebDriverWait(driver,TIME_OUT);
+    }
 
+    @Override
+    public void openPage() {
+        driver.get(BASE_PAGE + "/register");
+    }
 
-    private String showPasswordAdviceTumblerCss = "[type=checkbox]";
-    private String showPasswordAdviceTumblerXpath = "//input[@type='checkbox']";
+    public void registerAs(Customer customer){
+        enterEmail(customer.getEmail());
+        enterPassword(customer.getPassword());
+        repeatPassword(customer.getPassword());
+        clickOnSelectQuestionDropDown();
+        chooseSecurityQuestion();
+        enterAnswer();
+        clickOnRegisterButton();
+    }
 
-    private String securityQuestionPicklistCss = "[name=securityQuestion]";
-    private String securityQuestionPicklistXpath = "//*[@name='securityQuestion']";
+    public void clickOnAccountButton() {
+        driver.findElement(By.xpath(accountButton)).click();
+    }
+    public void clickOnSelectQuestionDropDown() {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                driver.findElement(By.xpath(securityQuestionPicklist)));
+    }
 
-    private String answerFieldCss = "[data-placeholder^='Answer']";
-    private String answerFieldCssXpath = "//input[contains(@data-placeholder,'Answer')]";
+    public String getRegisterSuccessMessage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'Registration completed')]")));
+        return driver.findElement(By.xpath("//span[contains(.,'Registration completed')]")).getText();
+    }
 
-    private String registerButtonCss = "[type='submit'] span.mat-button-focus-overlay";
-    private String registerButtonXpath = "//button[@type='submit']/span[contains(@class, 'button-focus')]";
+    public void clickOnRegisterButton() {
+        // String message = "//span[contains(.,'Language has been changed to English')]";
+        //wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(message)));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(By.xpath(registerButton)));
+    }
 
-    private String loginPageLinkCss = "[href='#/login']";
-    private String loginPageLinkXpath = "//a[@href='#/login']";
+    public String getActualCaption() {
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1"), "Login"));
+        return driver.findElement(By.xpath("//h1")).getText();
+    }
 
+    public void enterAnswer() {
+        driver.findElement(By.xpath(answerField)).clear();
+        driver.findElement(By.xpath(answerField)).sendKeys("2468");
+    }
+
+    public void chooseSecurityQuestion() {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                driver.findElement(By.xpath("//span[contains(.,'Your eldest siblings middle name?')]")));
+    }
+
+    public void repeatPassword(String password) {
+        driver.findElement(By.xpath(passwordRepeatField)).clear();
+        driver.findElement(By.xpath(passwordRepeatField)).sendKeys(password);
+    }
+
+    public void enterPassword(String password) {
+        driver.findElement(By.xpath(passwordField)).clear();
+        driver.findElement(By.xpath(passwordField)).sendKeys(password);
+    }
+
+    public void enterEmail(String email) {
+        driver.findElement(By.xpath(emailField)).clear();
+        driver.findElement(By.xpath(emailField)).sendKeys(email);
+    }
 }
