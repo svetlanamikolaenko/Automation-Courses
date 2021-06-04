@@ -1,5 +1,6 @@
 package com.ct.tests;
 
+import com.ct.framework.config.TestConfig;
 import com.ct.framework.driver.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -10,6 +11,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 
+import static com.ct.framework.driver.WebDriverRunner.getWebDriver;
+
 public class BaseTest {
 
     protected WebDriver driver;
@@ -17,8 +20,8 @@ public class BaseTest {
 
     @BeforeSuite
     public void setup(){
-        driver = WebDriverRunner.getWebDriver();
         System.out.println("Setting driver before suit running");
+        driver = getWebDriver();
     }
 
     @AfterSuite
@@ -28,12 +31,10 @@ public class BaseTest {
     }
 
     @BeforeClass
-    public void openSite() {
-        wait = new WebDriverWait(driver, 5);
-        driver.get("http://beeb0b73705f.sn.mynetname.net:3000/#/");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@aria-label='Close Welcome Banner']")));
-        driver.manage().addCookie( new Cookie("welcomebanner_status", "dismiss"));
-        driver.manage().addCookie( new Cookie("cookieconsent_status", "dismiss"));
+    public void openSite(){
+        driver.get(TestConfig.CONFIG.baseUrl());
+        driver.manage().addCookie(new Cookie("welcomebanner_status", "dismiss"));
+        driver.manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
         driver.navigate().refresh();
     }
 }

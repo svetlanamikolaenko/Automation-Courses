@@ -1,4 +1,6 @@
-package com.ct.pages;
+package com.ct.framework.pages;
+
+import org.openqa.selenium.WebDriver;
 
 public class ProfilePage {
     private String emailFieldCss =  "[name=email]";
@@ -21,4 +23,5 @@ public class ProfilePage {
 
     private String linkImageButtonCss = "[type=submit][aria-label*='image']";
     private String linkImageButtonXpath = "//button[contains(.,'Link Image')]";
+
 }

@@ -1,32 +1,25 @@
 package com.ct.tests.login;
 
+import com.ct.framework.pages.LoginPage;
+import com.ct.model.Customer;
 import com.ct.tests.BaseTest;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
 public class LoginTest extends BaseTest {
-    private String emailField = "//input[@name='email']";
-    private String passwordField = "//input[@name='password']";
-    private String loginButton = "//button[@id='loginButton']";
-    private String accountButton  = "//button[@id='navbarAccount']";
-    private String loginNavButton  = "//button[@id='navbarLoginButton']";
 
-    String email;
-    String password;
+    Customer customer;
+    LoginPage loginPage;
 
     @BeforeMethod
-    public void openSignUpPage() {
-        wait = new WebDriverWait(driver, 5);
-        driver.findElement(By.xpath(accountButton)).click();
-        driver.findElement(By.xpath(loginNavButton)).click();
-        email = "svitlana8@gmail.com";
-        password = "passw0rd";
+    public void setUp() {
+        customer = Customer.newBuilder().withEmail("svitlana8@gmail.com").withPassword("passw0rd").build();
+        loginPage = new LoginPage(driver);
+        loginPage.openPage();
     }
 
     @AfterMethod
@@ -35,19 +28,13 @@ public class LoginTest extends BaseTest {
     }
 
     @Test
-    public void userCanLoginTest() {
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(driver.findElement(By.xpath("//h1")).getText(), "Login");
-        driver.findElement(By.xpath(emailField)).clear();
-        driver.findElement(By.xpath(emailField)).sendKeys(email);
-        driver.findElement(By.xpath(passwordField)).clear();
-        driver.findElement(By.xpath(passwordField)).sendKeys(password);
-        driver.findElement(By.xpath(loginButton)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class , 'heading')]")));
-        softAssert.assertEquals(driver.findElement(By.xpath("//div[contains(@class , 'heading')]")).getText(), "All Products");
-        driver.findElement(By.xpath(accountButton)).click();
-        wait.until(ExpectedConditions.textToBe(By.xpath("//button[@aria-label='Go to user profile']/span"), email));
-        softAssert.assertEquals(driver.findElement(By.xpath("//button[@aria-label='Go to user profile']/span")).getText(), email);
-        softAssert.assertAll();
+    public void userCanLoginTest() throws InterruptedException {
+        String pageCaption = loginPage.getPageCaption();
+        Assert.assertEquals(pageCaption, "Login");
+        loginPage.loginAs(customer);
+        String profilePageHeading = loginPage.getActualHeading();
+        Assert.assertEquals(profilePageHeading, "All Products");
+        String actualAccountName = loginPage.getActualAccountName(customer.getEmail());
+        Assert.assertEquals(actualAccountName, customer.getEmail());
     }
 }

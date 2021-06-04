@@ -8,4 +8,7 @@ public interface TestConfig extends Config {
     TestConfig CONFIG = ConfigFactory.create(TestConfig.class);
     @DefaultValue("chrome")
     String browser();
+
+    @Key("base.url")
+    String baseUrl();
 }

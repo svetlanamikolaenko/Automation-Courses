@@ -1,4 +1,4 @@
-package com.ct.pages;
+package com.ct.framework.pages;
 
 public class RegistrationPage {
     private String emailFieldCss =  "[aria-label^='Email']";
