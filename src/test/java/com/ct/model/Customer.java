@@ -1,7 +1,6 @@
 package com.ct.model;
 
 public class Customer {
-    public String getEmail;
     private String email;
     private String password;
 

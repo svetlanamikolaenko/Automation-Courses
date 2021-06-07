@@ -34,6 +34,7 @@ public class LoginPage extends AbstractPage {
     @FindBy(xpath = "//h1")
     private WebElement caption;
 
+    private final String loginPageCaption = "Login";
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -45,9 +46,10 @@ public class LoginPage extends AbstractPage {
         driver.get(BASE_PAGE + "/login");
     }
 
-    public void navigateToLoginPage() {
+    public LoginPage navigateToLoginPage() {
         clickOnAccountButton();
         loginNavButton.click();
+        return this;
     }
 
     public String getActualAccountName(String currentEmail) {
@@ -63,11 +65,12 @@ public class LoginPage extends AbstractPage {
     }
 
     public String getPageCaption() {
-        return caption.getText();
+         return caption.getText();
     }
 
-    public void clickOnAccountButton() {
+    public LoginPage clickOnAccountButton() {
         accountButton.click();
+        return this;
     }
 
     public void clickOnLoginButton() {
@@ -85,9 +88,11 @@ public class LoginPage extends AbstractPage {
         emailField.sendKeys(email);
     }
 
-    public void loginAs(Customer customer) {
+    public LoginPage loginAs(Customer customer) {
+        waitUntilTextToBePresent(caption, caption.getText());
         enterEmail(customer.getEmail());
         enterPassword(customer.getPassword());
         clickOnLoginButton();
+        return this;
     }
 }

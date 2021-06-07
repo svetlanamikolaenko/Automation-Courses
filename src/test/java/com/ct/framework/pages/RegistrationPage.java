@@ -1,26 +1,73 @@
 package com.ct.framework.pages;
 
 import com.ct.model.Customer;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegistrationPage extends AbstractPage {
-    private String emailField = "//input[contains(@aria-label,'Email')]";
-    private String passwordField = "//input[@aria-label='Field for the password']";
-    private String passwordRepeatField = "//input[@aria-label='Field to confirm the password']";
-    private String securityQuestionPicklist = "//*[@name='securityQuestion']";
-    private String answerField = "//input[contains(@data-placeholder,'Answer')]";
-    private String registerButton = "//button[@id='registerButton']";
-    private String accountButton = "//button[@id='navbarAccount']";
-    private String loginNavButton = "//button[@id='navbarLoginButton']";
-    private LoginPage LoginPage;
+
+    @FindBy(xpath = "//input[contains(@aria-label,'Email')]")
+    private WebElement emailField;
+
+    @FindBy(xpath = "//input[@aria-label='Field for the password']")
+    private WebElement passwordField;
+
+    @FindBy(xpath = "//input[@aria-label='Field to confirm the password']")
+    private WebElement passwordRepeatField;
+
+    @FindBy(xpath = "//*[@name='securityQuestion']")
+    private WebElement securityQuestionPicklist;
+
+    @FindBy(xpath = "//input[contains(@data-placeholder,'Answer')]")
+    private WebElement answerField;
+
+    @FindBy(xpath = "//button[@id='registerButton']")
+    private WebElement registerButton;
+
+    @FindBy(xpath = "//button[@id='navbarAccount']")
+    private WebElement accountButton;
+
+    @FindBy(xpath = "//button[@id='navbarLoginButton']")
+    private WebElement loginNavButton;
+
+    @FindBy(xpath = "//span[contains(.,'Registration completed')]")
+    private WebElement registrationSuccessMessage;
+
+    @FindBy(xpath = "//h1")
+    private WebElement caption;
+
+    @FindBy(xpath = "//span[contains(.,'Your eldest siblings middle name?')]")
+    private WebElement securityQuestion;
+
+    @FindBy(xpath  = "//div[contains(@class, 'error')]")
+    private WebElement errorUniqueUser;
+
+    @FindBy (xpath = "//input[contains(@aria-label,'Email')]/ancestor::div[contains(@class, 'mat-form')]//mat-error" )
+    private WebElement errorMessageEmail;
+
+    @FindBy (xpath = "//input[contains(@aria-label,'password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
+    WebElement  errorMessagePassword ;
+
+    @FindBy (xpath = "//input[contains(@aria-label,'Field to confirm the password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
+    WebElement  errorMessageRepeatPassword ;
+
+
+    final private String loginPageTitle = "Login";
+    final private String registrationCompletedSuccessMessage = "Registration completed successfully. You can now log in.";
+    final private String emailMustBeUniqueText = "Email must be unique";
 
     public RegistrationPage(WebDriver driver) {
         super(driver);
-        wait = new WebDriverWait(driver,TIME_OUT);
+        wait = new WebDriverWait(driver, TIME_OUT);
+        PageFactory.initElements(driver, this);
+        faker = new Faker();
     }
 
     @Override
@@ -28,7 +75,7 @@ public class RegistrationPage extends AbstractPage {
         driver.get(BASE_PAGE + "/register");
     }
 
-    public void registerAs(Customer customer){
+    public RegistrationPage registerAs(Customer customer) {
         enterEmail(customer.getEmail());
         enterPassword(customer.getPassword());
         repeatPassword(customer.getPassword());
@@ -36,54 +83,116 @@ public class RegistrationPage extends AbstractPage {
         chooseSecurityQuestion();
         enterAnswer();
         clickOnRegisterButton();
+        return this;
+    }
+
+    public RegistrationPage enterEmptyEmail() {
+      emailField.clear();
+      emailField.sendKeys(Keys.TAB);
+      return this;
+    }
+
+    public String getEmailErrorMessage() {
+        waitUntilVisible(errorMessageEmail);
+        return errorMessageEmail.getText();
+    }
+    public String getPasswordErrorMessage() {
+        waitUntilVisible(errorMessagePassword);
+        return errorMessagePassword.getText();
+    }
+
+    public String getRepeatPasswordErrorMessage() {
+        waitUntilVisible(errorMessageRepeatPassword);
+        return errorMessageRepeatPassword.getText();
+    }
+
+
+    public RegistrationPage enterNotValidEmail() {
+        emailField.click();
+        emailField.sendKeys(faker.name().name());
+        emailField.sendKeys(Keys.TAB);
+        return this;
+    }
+
+    public RegistrationPage enterEmptyPassword() {
+        passwordField.clear();
+        passwordField.sendKeys(Keys.TAB);
+        return this;
+    }
+
+    public RegistrationPage enterEmptyRepeatPassword() {
+        passwordRepeatField.clear();
+        passwordRepeatField.sendKeys(Keys.TAB);
+        return this;
+    }
+
+    public RegistrationPage enterShortPassword() {
+        passwordField.click();
+        passwordField.sendKeys("pass");
+        passwordField.sendKeys(Keys.TAB);
+        return this;
+    }
+
+    public RegistrationPage enterAnyRepeatPassword() {
+        passwordRepeatField.click();
+        passwordRepeatField.sendKeys("pass");
+        passwordRepeatField.sendKeys(Keys.TAB);
+        return this;
+    }
+
+
+    public String getCaption(){
+        waitUntilVisible(caption);
+        return caption.getText();
+    }
+    public String getErrorUniqueUser(){
+        waitUntilTextToBePresent(errorUniqueUser, emailMustBeUniqueText);
+        return errorUniqueUser.getText();
     }
 
     public void clickOnAccountButton() {
-        driver.findElement(By.xpath(accountButton)).click();
+        accountButton.click();
     }
+
+    public String getRegistrationCompletedSuccessMessage() {
+        return registrationCompletedSuccessMessage;
+    }
+
     public void clickOnSelectQuestionDropDown() {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-                driver.findElement(By.xpath(securityQuestionPicklist)));
+        clickJS(securityQuestionPicklist);
     }
 
     public String getRegisterSuccessMessage() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'Registration completed')]")));
-        return driver.findElement(By.xpath("//span[contains(.,'Registration completed')]")).getText();
+        waitUntilTextToBePresent(registrationSuccessMessage, registrationCompletedSuccessMessage);
+        return registrationSuccessMessage.getText();
     }
 
     public void clickOnRegisterButton() {
-        // String message = "//span[contains(.,'Language has been changed to English')]";
-        //wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(message)));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(By.xpath(registerButton)));
-    }
-
-    public String getActualCaption() {
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1"), "Login"));
-        return driver.findElement(By.xpath("//h1")).getText();
+        waitUntilVisible(registerButton);
+        clickJS(registerButton);
     }
 
     public void enterAnswer() {
-        driver.findElement(By.xpath(answerField)).clear();
-        driver.findElement(By.xpath(answerField)).sendKeys("2468");
+        answerField.clear();
+        answerField.sendKeys(faker.code().ean8());
     }
 
     public void chooseSecurityQuestion() {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-                driver.findElement(By.xpath("//span[contains(.,'Your eldest siblings middle name?')]")));
+        clickJS(securityQuestion);
     }
 
     public void repeatPassword(String password) {
-        driver.findElement(By.xpath(passwordRepeatField)).clear();
-        driver.findElement(By.xpath(passwordRepeatField)).sendKeys(password);
+        passwordRepeatField.clear();
+        passwordRepeatField.sendKeys(password);
     }
 
     public void enterPassword(String password) {
-        driver.findElement(By.xpath(passwordField)).clear();
-        driver.findElement(By.xpath(passwordField)).sendKeys(password);
+        passwordField.clear();
+        passwordField.sendKeys(password);
     }
 
     public void enterEmail(String email) {
-        driver.findElement(By.xpath(emailField)).clear();
-        driver.findElement(By.xpath(emailField)).sendKeys(email);
+        emailField.clear();
+        emailField.sendKeys(email);
     }
 }
