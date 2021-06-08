@@ -2,7 +2,6 @@ package com.ct.framework.pages;
 
 import com.ct.framework.helpers.JavaScriptHelper;
 import com.ct.model.Product;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

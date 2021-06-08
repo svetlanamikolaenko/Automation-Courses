@@ -68,7 +68,7 @@ public class ProductAddTest extends BaseTest {
     }
 
     @Test
-    public void clickOn(){
+    public void verifyClickingOnProductItem(){
         Assert.assertTrue(profilePage.profilePageHeadingIsDisplayed());
         profilePage.clickOnProductItem(applePomaceProduct.getName());
         Assert.assertEquals(profilePage.getNameInCard(), applePomaceProduct.getName());
