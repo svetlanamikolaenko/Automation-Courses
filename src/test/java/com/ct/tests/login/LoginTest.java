@@ -24,17 +24,13 @@ public class LoginTest extends BaseTest {
 
     @AfterMethod
     public void logout() {
-        ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
+       loginPage.logout();
     }
 
     @Test
     public void userCanLoginTest(){
-        String pageCaption = loginPage.getPageCaption();
-        Assert.assertEquals(pageCaption, "Login");
         loginPage.loginAs(customer);
         loginPage.clickOnAccountButton();
-        String profilePageHeading = loginPage.getActualHeading();
-        Assert.assertEquals(profilePageHeading, "All Products");
         String actualAccountName = loginPage.getActualAccountName(customer.getEmail());
         Assert.assertEquals(actualAccountName, customer.getEmail());
     }

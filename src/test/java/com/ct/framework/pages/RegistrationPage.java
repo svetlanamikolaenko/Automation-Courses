@@ -1,14 +1,14 @@
 package com.ct.framework.pages;
 
+import com.ct.framework.helpers.JavaScriptHelper;
 import com.ct.model.Customer;
 import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegistrationPage extends AbstractPage {
@@ -46,20 +46,24 @@ public class RegistrationPage extends AbstractPage {
     @FindBy(xpath = "//span[contains(.,'Your eldest siblings middle name?')]")
     private WebElement securityQuestion;
 
-    @FindBy(xpath  = "//div[contains(@class, 'error')]")
+    @FindBy(xpath = "//div[contains(@class, 'error')]")
     private WebElement errorUniqueUser;
 
-    @FindBy (xpath = "//input[contains(@aria-label,'Email')]/ancestor::div[contains(@class, 'mat-form')]//mat-error" )
+    @FindBy(xpath = "//input[contains(@aria-label,'Email')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
     private WebElement errorMessageEmail;
 
-    @FindBy (xpath = "//input[contains(@aria-label,'password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
-    WebElement  errorMessagePassword ;
+    @FindBy(xpath = "//input[contains(@aria-label,'password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
+    private WebElement errorMessagePassword;
 
-    @FindBy (xpath = "//input[contains(@aria-label,'Field to confirm the password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
-    WebElement  errorMessageRepeatPassword ;
+    @FindBy(xpath = "//input[contains(@aria-label,'Field to confirm the password')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
+    private WebElement errorMessageRepeatPassword;
 
+    @FindBy(xpath = "//*[@name='securityQuestion']/ancestor::div[contains(@class, 'mat-form')]//mat-error")
+    private WebElement errorMessageSecurityQuestion;
 
-    final private String loginPageTitle = "Login";
+    @FindBy(xpath = "//input[contains(@data-placeholder,'Answer')]/ancestor::div[contains(@class, 'mat-form')]//mat-error")
+    private WebElement errorMessageAnswer;
+
     final private String registrationCompletedSuccessMessage = "Registration completed successfully. You can now log in.";
     final private String emailMustBeUniqueText = "Email must be unique";
 
@@ -68,7 +72,10 @@ public class RegistrationPage extends AbstractPage {
         wait = new WebDriverWait(driver, TIME_OUT);
         PageFactory.initElements(driver, this);
         faker = new Faker();
+        javaScriptHelper = new JavaScriptHelper(driver);
+        actions = new Actions(driver);
     }
+
 
     @Override
     public void openPage() {
@@ -87,15 +94,16 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public RegistrationPage enterEmptyEmail() {
-      emailField.clear();
-      emailField.sendKeys(Keys.TAB);
-      return this;
+        emailField.clear();
+        emailField.sendKeys(Keys.TAB);
+        return this;
     }
 
     public String getEmailErrorMessage() {
         waitUntilVisible(errorMessageEmail);
         return errorMessageEmail.getText();
     }
+
     public String getPasswordErrorMessage() {
         waitUntilVisible(errorMessagePassword);
         return errorMessagePassword.getText();
@@ -140,12 +148,38 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
+    public RegistrationPage selectEmptySecurityQuestion() {
+        waitUntilVisible(securityQuestionPicklist);
+        actions.click(securityQuestionPicklist)
+                .moveToElement(emailField)
+                .click(emailField)
+                .build()
+                .perform();
+        return this;
+    }
 
-    public String getCaption(){
+    public String getSecurityQuestionErrorMessage() {
+        waitUntilVisible(errorMessageSecurityQuestion);
+        return errorMessageSecurityQuestion.getText();
+    }
+
+    public RegistrationPage enterEmptyAnswer() {
+        answerField.clear();
+        answerField.sendKeys(Keys.TAB);
+        return this;
+    }
+
+    public String getAnswerErrorMessage() {
+        waitUntilVisible(errorMessageAnswer);
+        return errorMessageAnswer.getText();
+    }
+
+    public String getCaption() {
         waitUntilVisible(caption);
         return caption.getText();
     }
-    public String getErrorUniqueUser(){
+
+    public String getErrorUniqueUser() {
         waitUntilTextToBePresent(errorUniqueUser, emailMustBeUniqueText);
         return errorUniqueUser.getText();
     }
@@ -158,8 +192,9 @@ public class RegistrationPage extends AbstractPage {
         return registrationCompletedSuccessMessage;
     }
 
-    public void clickOnSelectQuestionDropDown() {
-        clickJS(securityQuestionPicklist);
+    public RegistrationPage clickOnSelectQuestionDropDown() {
+        javaScriptHelper.clickJS(securityQuestionPicklist);
+        return this;
     }
 
     public String getRegisterSuccessMessage() {
@@ -169,7 +204,7 @@ public class RegistrationPage extends AbstractPage {
 
     public void clickOnRegisterButton() {
         waitUntilVisible(registerButton);
-        clickJS(registerButton);
+        javaScriptHelper.clickJS(registerButton);
     }
 
     public void enterAnswer() {
@@ -178,7 +213,7 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public void chooseSecurityQuestion() {
-        clickJS(securityQuestion);
+        javaScriptHelper.clickJS(securityQuestion);
     }
 
     public void repeatPassword(String password) {

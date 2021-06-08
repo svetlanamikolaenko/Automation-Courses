@@ -10,10 +10,6 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -26,14 +22,10 @@ public class Product {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public Product() {
     }
 
-    public Builder newBuilder(){
+    public static Builder newBuilder(){
         return new Builder();
     }
 

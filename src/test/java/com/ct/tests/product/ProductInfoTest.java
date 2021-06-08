@@ -1,41 +1,41 @@
 package com.ct.tests.product;
 
+import com.ct.framework.pages.ProfilePage;
+import com.ct.model.Product;
 import com.ct.tests.BaseTest;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 public class ProductInfoTest extends BaseTest {
-    private String bananaJuiceItem = "//div[@class = 'item-name' and contains(., 'Banana Juice')]";
-    private String itemPrice = "/following-sibling::div[@class='item-price']";
-    private String itemImage = "/../preceding-sibling::div/img";
-    private String bananaJuiceDescription = "Monkeys love it the most.";
-    private String card = "//mat-dialog-container";
-    private String priceInCard = "//p[@class = 'item-price']";
-    private String nameInCard = "//h1";
-    private String imageInCard = "//img[@alt='Banana Juice (1000ml)']";
-    private String descriptionInCard = "//br/preceding-sibling::div";
+    Product product;
+    ProfilePage profilePage;
+
+    @BeforeMethod
+    public void setUp() {
+        product = Product.newBuilder().withName("Banana Juice (1000ml)").withDescription("Monkeys love it the most.").withPrice(1.99).withImage("http://beeb0b73705f.sn.mynetname.net:3000/assets/public/images/products/banana_juice.jpg").build();
+        profilePage = new ProfilePage(driver);
+    }
 
     @Test
-    public void verifyActualProductInfo(){
+    public void verifyActualProductInfo() {
         SoftAssert softAssert = new SoftAssert();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(bananaJuiceItem)));
-        String bananaJuiceName = driver.findElement(By.xpath(bananaJuiceItem)).getText();
-        String bananaJuicePrice = driver.findElement(By.xpath(bananaJuiceItem + itemPrice)).getText();
-        String bananaJuiceImage = driver.findElement(By.xpath( bananaJuiceItem + itemImage)).getAttribute("src");
-        driver.findElement(By.xpath(bananaJuiceItem)).click();
+        softAssert.assertEquals(product.getName(), profilePage.getBananaJuiceName());
+        softAssert.assertEquals(product.getImage(), profilePage.getBananaJuiceImage());
+        softAssert.assertEquals(product.getPrice(), profilePage.getBananaJuicePrice());
+        softAssert.assertAll();
+    }
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(card)));
-        String bananaJuiceNameInCard = driver.findElement(By.xpath(nameInCard)).getText();
-        String bananaJuicePriceInCard = driver.findElement(By.xpath(priceInCard)).getText();
-        String bananaJuiceImageInCard = driver.findElement(By.xpath(imageInCard)).getAttribute("src");
-        String bananaJuiceDescriptionInCard = driver.findElement(By.xpath(descriptionInCard)).getText();
-
-        softAssert.assertEquals(bananaJuiceNameInCard, bananaJuiceName);
-        softAssert.assertEquals(bananaJuicePriceInCard, bananaJuicePrice);
-        softAssert.assertEquals(bananaJuiceImageInCard, bananaJuiceImage);
-        softAssert.assertEquals(bananaJuiceDescriptionInCard, bananaJuiceDescription );
+    @Test
+    public void verifyActualProductInfoInCard() {
+        SoftAssert softAssert = new SoftAssert();
+        profilePage.clickOnBananaJuiceItem();
+        Assert.assertTrue(profilePage.cardIsOpen());
+        softAssert.assertEquals(product.getName(), profilePage.getNameInCard());
+        softAssert.assertEquals(product.getPrice(), profilePage.getPriceInCard());
+        softAssert.assertEquals(product.getImage(), profilePage.getImageInCard());
+        softAssert.assertEquals(product.getDescription(), profilePage.getDescriptionInCard());
         softAssert.assertAll();
     }
 }

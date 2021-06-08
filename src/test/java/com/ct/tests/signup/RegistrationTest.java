@@ -29,9 +29,8 @@ public class RegistrationTest extends BaseTest  {
     }
 
     @AfterMethod
-    public void refreshPage()  {
-        ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
-        driver.navigate().refresh();
+    public void clearLocalStorage()  {
+        loginPage.logout();
     }
 
     @Test
