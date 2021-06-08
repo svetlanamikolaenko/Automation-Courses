@@ -37,12 +37,17 @@ public class ProductAddTest extends BaseTest {
     @Test
     public void verifyAddingProductToBasket(){
         SoftAssert softAssert = new SoftAssert();
-        String successMessage = profilePage.addApplePomaceToBasket();
+        Assert.assertTrue(profilePage.profilePageHeadingIsDisplayed());
+        Assert.assertTrue(profilePage.itemNameIsDisplayed(applePomaceProduct.getName()));
+
+        profilePage.clickOnAddToBasketButton(applePomaceProduct.getName());
+        String successMessage = profilePage.getAddToBasketSuccessMessage(applePomaceProduct.getName());
         softAssert.assertEquals(successMessage, "Placed Apple Pomace into basket.");
-        String applePomace = profilePage.applePomaceInBasket();
+
+        String applePomace = profilePage.applePomaceInBasket(applePomaceProduct.getName());
         softAssert.assertEquals(applePomace, applePomaceProduct.getName());
-        softAssert.assertEquals(profilePage.getTotalPrice(), applePomaceProduct.getPrice() );
-        profilePage.removeApplePomaceFromBasket();
+        softAssert.assertEquals(profilePage.getTotalPrice(), applePomaceProduct.getPrice());
+        profilePage.removeProductFromBasket(applePomaceProduct.getName());
         softAssert.assertAll();
     }
 
@@ -51,7 +56,7 @@ public class ProductAddTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         Assert.assertTrue(profilePage.profilePageHeadingIsDisplayed());
         profilePage.clickOnNextButton();
-        profilePage.clickOnButtonAddToBasketJuiceShopCoaster();
+        profilePage.clickOnAddToBasketButton(juiceShopCoasterProduct.getName());
         Assert.assertEquals(profilePage.getOutOfStockMessage(),
                 "We are out of stock! Sorry for the inconvenience.",
                 "Chosen item is not sold out!");
@@ -60,5 +65,12 @@ public class ProductAddTest extends BaseTest {
         softAssert.assertFalse(profilePage.checkoutButtonIsEnabled(), "Check items in the basket!");
         softAssert.assertEquals(profilePage.getTotalPrice(), 0.0);
         softAssert.assertAll();
+    }
+
+    @Test
+    public void clickOn(){
+        Assert.assertTrue(profilePage.profilePageHeadingIsDisplayed());
+        profilePage.clickOnProductItem(applePomaceProduct.getName());
+        Assert.assertEquals(profilePage.getNameInCard(), applePomaceProduct.getName());
     }
 }

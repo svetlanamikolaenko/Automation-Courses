@@ -21,16 +21,16 @@ public class ProductInfoTest extends BaseTest {
     @Test
     public void verifyActualProductInfo() {
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(product.getName(), profilePage.getBananaJuiceName());
-        softAssert.assertEquals(product.getImage(), profilePage.getBananaJuiceImage());
-        softAssert.assertEquals(product.getPrice(), profilePage.getBananaJuicePrice());
+        softAssert.assertEquals(product.getName(), profilePage.getProductName(product.getName()));
+        softAssert.assertEquals(product.getImage(), profilePage.getProductImage(product.getName()));
+        softAssert.assertEquals(product.getPrice(), profilePage.getProductPrice(product.getName()));
         softAssert.assertAll();
     }
 
     @Test
     public void verifyActualProductInfoInCard() {
         SoftAssert softAssert = new SoftAssert();
-        profilePage.clickOnBananaJuiceItem();
+        profilePage.clickOnProductItem(product.getName());
         Assert.assertTrue(profilePage.cardIsOpen());
         softAssert.assertEquals(product.getName(), profilePage.getNameInCard());
         softAssert.assertEquals(product.getPrice(), profilePage.getPriceInCard());

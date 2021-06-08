@@ -4,6 +4,7 @@ import com.ct.framework.config.TestConfig;
 import com.ct.framework.driver.WebDriverRunner;
 import com.ct.framework.helpers.JavaScriptHelper;
 import com.github.javafaker.Faker;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,11 +26,18 @@ public abstract class AbstractPage {
         this.driver = driver;
     }
 
-    public void waitUntilVisible(WebElement element){
+    public void waitElementUntilVisible(WebElement element){
         wait.until(ExpectedConditions.visibilityOf(element));
     }
     public void waitUntilTextToBePresent(WebElement element, String text){
         wait.until(ExpectedConditions.textToBePresentInElement(element,text));
+    }
+    public void waitLocatorUntilVisible(String locator){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
+    }
+
+    public WebElement findElementByXpath(String text){
+        return driver.findElement(By.xpath(text));
     }
 
     public abstract void openPage();

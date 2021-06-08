@@ -100,17 +100,17 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public String getEmailErrorMessage() {
-        waitUntilVisible(errorMessageEmail);
+        waitElementUntilVisible(errorMessageEmail);
         return errorMessageEmail.getText();
     }
 
     public String getPasswordErrorMessage() {
-        waitUntilVisible(errorMessagePassword);
+        waitElementUntilVisible(errorMessagePassword);
         return errorMessagePassword.getText();
     }
 
     public String getRepeatPasswordErrorMessage() {
-        waitUntilVisible(errorMessageRepeatPassword);
+        waitElementUntilVisible(errorMessageRepeatPassword);
         return errorMessageRepeatPassword.getText();
     }
 
@@ -149,7 +149,7 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public RegistrationPage selectEmptySecurityQuestion() {
-        waitUntilVisible(securityQuestionPicklist);
+        waitElementUntilVisible(securityQuestionPicklist);
         actions.click(securityQuestionPicklist)
                 .moveToElement(emailField)
                 .click(emailField)
@@ -159,7 +159,7 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public String getSecurityQuestionErrorMessage() {
-        waitUntilVisible(errorMessageSecurityQuestion);
+        waitElementUntilVisible(errorMessageSecurityQuestion);
         return errorMessageSecurityQuestion.getText();
     }
 
@@ -170,12 +170,12 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public String getAnswerErrorMessage() {
-        waitUntilVisible(errorMessageAnswer);
+        waitElementUntilVisible(errorMessageAnswer);
         return errorMessageAnswer.getText();
     }
 
     public String getCaption() {
-        waitUntilVisible(caption);
+        waitElementUntilVisible(caption);
         return caption.getText();
     }
 
@@ -203,7 +203,7 @@ public class RegistrationPage extends AbstractPage {
     }
 
     public void clickOnRegisterButton() {
-        waitUntilVisible(registerButton);
+        waitElementUntilVisible(registerButton);
         javaScriptHelper.clickJS(registerButton);
     }
 
