@@ -2,16 +2,12 @@ package com.ct.tests;
 
 import com.ct.framework.config.TestConfig;
 import com.ct.framework.driver.WebDriverRunner;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 
-import static com.ct.framework.driver.WebDriverRunner.getWebDriver;
 
 public class BaseTest {
 
@@ -22,7 +18,7 @@ public class BaseTest {
     @BeforeClass
     public void openSite(){
         System.out.println("Setting driver before class running");
-        driver = getWebDriver();
+        driver = WebDriverRunner.getWebDriver();
         driver.get(BASE_PAGE);
         wait = new WebDriverWait(driver, 10);
         driver.manage().addCookie(new Cookie("welcomebanner_status", "dismiss"));

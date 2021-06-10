@@ -11,4 +11,10 @@ public interface TestConfig extends Config {
 
     @Key("base.url")
     String baseUrl();
+
+    boolean remote();
+
+    @Key("selenium.server.url")
+    String seleniumServerUrl();
+
 }

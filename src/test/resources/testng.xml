@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="Regression testing Suite" parallel="false">
+<suite name="Regression testing Suite" verbose="1" configfailurepolicy="continue" parallel="classes" thread-count="2">
     <test name="All tests">
         <classes>
             <class name="com.ct.tests.signup.RegistrationFieldsErrorsTest"/>
+            <class name="com.ct.tests.signup.RegistrationTest"/>
+            <class name="com.ct.tests.login.LoginNegativeTest"/>
+            <class name="com.ct.tests.login.LoginTest"/>
+            <class name="com.ct.tests.product.ProductAddTest"/>
+            <class name="com.ct.tests.product.ProductInfoTest"/>
         </classes>
     </test>
 </suite>

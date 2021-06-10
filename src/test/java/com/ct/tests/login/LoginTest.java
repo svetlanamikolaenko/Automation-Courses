@@ -3,8 +3,6 @@ package com.ct.tests.login;
 import com.ct.framework.pages.LoginPage;
 import com.ct.model.Customer;
 import com.ct.tests.BaseTest;
-
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
