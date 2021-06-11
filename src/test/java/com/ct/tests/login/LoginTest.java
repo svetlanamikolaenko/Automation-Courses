@@ -1,11 +1,13 @@
 package com.ct.tests.login;
 
+import com.ct.framework.config.TestConfig;
 import com.ct.framework.pages.LoginPage;
 import com.ct.model.Customer;
 import com.ct.tests.BaseTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
+import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -20,7 +22,7 @@ public class LoginTest extends BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        customer = Customer.newBuilder().withEmail("svitlana8@gmail.com").withPassword("passw0rd").build();
+        customer = Customer.newBuilder().withEmail(TestConfig.CONFIG.userEmail()).withPassword(TestConfig.CONFIG.userPassword()).build();
         loginPage = new LoginPage(driver);
         loginPage.openPage();
     }
@@ -33,6 +35,7 @@ public class LoginTest extends BaseTest {
 
     @Test
     @Feature("Customer login")
+    @TmsLink("ELEM-65961")
     public void userCanLoginTest(){
         loginPage.loginAs(customer);
         loginPage.clickOnAccountButton();

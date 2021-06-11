@@ -17,4 +17,9 @@ public interface TestConfig extends Config {
     @Key("selenium.server.url")
     String seleniumServerUrl();
 
+    @Key("user.email")
+    String userEmail();
+
+    @Key("user.password")
+    String userPassword();
 }
