@@ -5,13 +5,17 @@ import com.ct.framework.pages.RegistrationPage;
 import com.ct.model.Customer;
 import com.ct.tests.BaseTest;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-
+@Epic("Sign up")
+@Story("Customer sign up to Juice Shop")
 public class RegistrationTest extends BaseTest  {
 
     Customer customer;
@@ -33,7 +37,9 @@ public class RegistrationTest extends BaseTest  {
         loginPage.logout();
     }
 
+
     @Test
+    @Feature("Customer registration")
     public void customerCanRegisterTest(){
         registrationPage.registerAs(customer);
         Assert.assertEquals(registrationPage.getRegisterSuccessMessage(),
@@ -42,6 +48,7 @@ public class RegistrationTest extends BaseTest  {
     }
 
     @Test
+    @Feature("Customer can login after registration")
     public void customerCanLoginAfterRegisterTest() {
         registrationPage.registerAs(customer);
         String actualAccountName = loginPage

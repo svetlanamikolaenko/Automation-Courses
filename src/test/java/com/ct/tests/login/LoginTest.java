@@ -3,11 +3,16 @@ package com.ct.tests.login;
 import com.ct.framework.pages.LoginPage;
 import com.ct.model.Customer;
 import com.ct.tests.BaseTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+@Epic("Sign in")
+@Story("Customer sign in to Juice Shop")
 public class LoginTest extends BaseTest {
 
     Customer customer;
@@ -25,7 +30,9 @@ public class LoginTest extends BaseTest {
        loginPage.logout();
     }
 
+
     @Test
+    @Feature("Customer login")
     public void userCanLoginTest(){
         loginPage.loginAs(customer);
         loginPage.clickOnAccountButton();

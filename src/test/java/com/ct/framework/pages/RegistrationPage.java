@@ -3,6 +3,7 @@ package com.ct.framework.pages;
 import com.ct.framework.helpers.JavaScriptHelper;
 import com.ct.model.Customer;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -82,6 +83,7 @@ public class RegistrationPage extends AbstractPage {
         driver.get(BASE_PAGE + "/register");
     }
 
+    @Step("Register As Customer")
     public RegistrationPage registerAs(Customer customer) {
         enterEmail(customer.getEmail());
         enterPassword(customer.getPassword());
@@ -93,28 +95,32 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
+    @Step("Populate Empty Email")
     public RegistrationPage enterEmptyEmail() {
         emailField.clear();
         emailField.sendKeys(Keys.TAB);
         return this;
     }
 
+    @Step("Get Error Message Under Email Field")
     public String getEmailErrorMessage() {
         waitElementUntilVisible(errorMessageEmail);
         return errorMessageEmail.getText();
     }
 
+    @Step("Get Error Message Under Password Field")
     public String getPasswordErrorMessage() {
         waitElementUntilVisible(errorMessagePassword);
         return errorMessagePassword.getText();
     }
 
+    @Step("Get Error Message Under Repeat Password Field")
     public String getRepeatPasswordErrorMessage() {
         waitElementUntilVisible(errorMessageRepeatPassword);
         return errorMessageRepeatPassword.getText();
     }
 
-
+    @Step("Populate Not Valid Email")
     public RegistrationPage enterNotValidEmail() {
         emailField.click();
         emailField.sendKeys(faker.name().name());
@@ -122,18 +128,21 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
+    @Step("Populate Empty Password")
     public RegistrationPage enterEmptyPassword() {
         passwordField.clear();
         passwordField.sendKeys(Keys.TAB);
         return this;
     }
 
+    @Step("Populate Empty Repeat Password")
     public RegistrationPage enterEmptyRepeatPassword() {
         passwordRepeatField.clear();
         passwordRepeatField.sendKeys(Keys.TAB);
         return this;
     }
 
+    @Step("Populate Too Short Password")
     public RegistrationPage enterShortPassword() {
         passwordField.click();
         passwordField.sendKeys("pass");
@@ -141,6 +150,7 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
+    @Step("Fill In Report Password Not Corresponding To Password")
     public RegistrationPage enterAnyRepeatPassword() {
         passwordRepeatField.click();
         passwordRepeatField.sendKeys("pass");
@@ -148,6 +158,7 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
+    @Step("Populate Empty Security Question")
     public RegistrationPage selectEmptySecurityQuestion() {
         waitElementUntilVisible(securityQuestionPicklist);
         actions.click(securityQuestionPicklist)
@@ -158,60 +169,72 @@ public class RegistrationPage extends AbstractPage {
         return this;
     }
 
+    @Step("Get Error Message Under Security Question Field")
     public String getSecurityQuestionErrorMessage() {
         waitElementUntilVisible(errorMessageSecurityQuestion);
         return errorMessageSecurityQuestion.getText();
     }
 
+    @Step("Populate Empty Answer")
     public RegistrationPage enterEmptyAnswer() {
         answerField.clear();
         answerField.sendKeys(Keys.TAB);
         return this;
     }
 
+    @Step("Get Error Message Under Answer Field")
     public String getAnswerErrorMessage() {
         waitElementUntilVisible(errorMessageAnswer);
         return errorMessageAnswer.getText();
     }
 
+    @Step("Get Page Caption")
     public String getCaption() {
         waitElementUntilVisible(caption);
         return caption.getText();
     }
 
+    @Step("Get Error Message If User Already Exists")
     public String getErrorUniqueUser() {
         waitUntilTextToBePresent(errorUniqueUser, emailMustBeUniqueText);
         return errorUniqueUser.getText();
     }
 
+    @Step("Click On Account Button")
     public void clickOnAccountButton() {
         accountButton.click();
     }
 
+    @Step("Get Success Message If Customer Registration Completed Successfully")
     public String getRegistrationCompletedSuccessMessage() {
         return registrationCompletedSuccessMessage;
     }
 
+    @Step("Click On Select Question Drop Down")
     public RegistrationPage clickOnSelectQuestionDropDown() {
         javaScriptHelper.clickJS(securityQuestionPicklist);
         return this;
     }
 
+    @Step("Get Success Message After Registration")
     public String getRegisterSuccessMessage() {
         waitUntilTextToBePresent(registrationSuccessMessage, registrationCompletedSuccessMessage);
         return registrationSuccessMessage.getText();
     }
 
+    @Step("Click On Register Button")
     public void clickOnRegisterButton() {
         waitElementUntilVisible(registerButton);
         javaScriptHelper.clickJS(registerButton);
     }
 
+    @Step("Enter Any Answer")
     public void enterAnswer() {
         answerField.clear();
         answerField.sendKeys(faker.code().ean8());
     }
 
+    @Step("Choose Security Question")
     public void chooseSecurityQuestion() {
         javaScriptHelper.clickJS(securityQuestion);
     }
@@ -221,11 +244,13 @@ public class RegistrationPage extends AbstractPage {
         passwordRepeatField.sendKeys(password);
     }
 
+    @Step("Enter Password")
     public void enterPassword(String password) {
         passwordField.clear();
         passwordField.sendKeys(password);
     }
 
+    @Step("Enter Email")
     public void enterEmail(String email) {
         emailField.clear();
         emailField.sendKeys(email);
