@@ -7,7 +7,7 @@ import org.aeonbits.owner.ConfigFactory;
 public interface TestConfig extends Config {
     TestConfig CONFIG = ConfigFactory.create(TestConfig.class);
 
-    @Key("browser.name")
+    @Key("browser")
     String browser();
 
     @Key("base.url")
