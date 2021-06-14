@@ -43,8 +43,8 @@ public class RegistrationTest extends BaseTest  {
     public void customerCanRegisterTest(){
         registrationPage.registerAs(customer);
         Assert.assertEquals(registrationPage.getRegisterSuccessMessage(),
-                registrationPage.getRegistrationCompletedSuccessMessage()
-                ,"User is already exists and not unique");
+                registrationPage.getRegistrationCompletedSuccessMessage(),
+                "User is already exists and not unique");
     }
 
     @Test
