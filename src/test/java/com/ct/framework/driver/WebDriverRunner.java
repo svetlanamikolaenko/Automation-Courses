@@ -27,10 +27,12 @@ public class WebDriverRunner {
                 case "firefox":{
                     if(TestConfig.CONFIG.remote()){
                         try {
-                            FirefoxOptions firefoxOptions = new FirefoxOptions();
-                            firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+                            DesiredCapabilities capabilities = new DesiredCapabilities();
+                            capabilities.setCapability("browserName", "firefox");
+                            capabilities.setCapability("browserVersion", "88.0");
+                            capabilities.setCapability("enableVNC", true);
                             driver.set(new RemoteWebDriver(new URL(TestConfig.CONFIG.seleniumServerUrl()),
-                                    firefoxOptions));
+                                    capabilities));
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         }

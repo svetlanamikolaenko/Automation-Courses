@@ -77,13 +77,13 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>2.22.1</version>
                     <configuration>
                         <argLine>
                             -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                         </argLine>
                         <suiteXmlFiles>
-                            <suitXmlFile>C:\Users\Svitlana Mykolaienko\AutomationCourses\src\test\resources\testng.xml</suitXmlFile>
+                            <suitXmlFile>src\test\resources\testng.xml</suitXmlFile>
                         </suiteXmlFiles>
                     </configuration>
                     <dependencies>
