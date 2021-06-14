@@ -81,6 +81,7 @@ public class RegistrationPage extends AbstractPage {
     @Override
     public void openPage() {
         driver.get(BASE_PAGE + "/register");
+        setCookies();
     }
 
     @Step("Register As Customer")

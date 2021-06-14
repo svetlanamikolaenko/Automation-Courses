@@ -77,10 +77,12 @@ public class ProfilePage extends AbstractPage {
     @Override
     public void openPage() {
         driver.get(BASE_PAGE);
+        setCookies();
     }
 
     @Step("Click on product item")
     public ProfilePage clickOnProductItem(String name) {
+        waitLocatorUntilVisible(String.format(item, name));
         findElementByXpath((String.format(item, name))).click();
         return this;
     }
@@ -219,6 +221,7 @@ public class ProfilePage extends AbstractPage {
 
     @Step("Remove Product Item From Basket")
     public void removeProductFromBasket(String name){
+        waitLocatorUntilVisible(String.format(itemInBasket,name));
         findElementByXpath(String.format(removeItemFromBasket, name)).click();
     }
 }

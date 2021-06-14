@@ -1,13 +1,9 @@
 package com.ct.framework.pages;
 
 import com.ct.framework.config.TestConfig;
-import com.ct.framework.driver.WebDriverRunner;
 import com.ct.framework.helpers.JavaScriptHelper;
 import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,14 +17,20 @@ public abstract class AbstractPage {
     protected JavaScriptHelper javaScriptHelper;
     protected Actions actions;
 
-
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public void setCookies() {
+        driver.manage().addCookie(new Cookie("welcomebanner_status", "dismiss"));
+        driver.manage().addCookie(new Cookie("cookieconsent_status", "dismiss"));
+        driver.navigate().refresh();
     }
 
     public void waitElementUntilVisible(WebElement element){
         wait.until(ExpectedConditions.visibilityOf(element));
     }
+
     public void waitUntilTextToBePresent(WebElement element, String text){
         wait.until(ExpectedConditions.textToBePresentInElement(element,text));
     }

@@ -57,6 +57,7 @@ public class LoginPage extends AbstractPage {
     @Override
     public void openPage() {
         driver.get(BASE_PAGE + "/login");
+        setCookies();
     }
 
     @Step

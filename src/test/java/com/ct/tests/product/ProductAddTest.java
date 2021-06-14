@@ -1,5 +1,6 @@
 package com.ct.tests.product;
 
+import com.ct.framework.config.TestConfig;
 import com.ct.framework.pages.LoginPage;
 import com.ct.framework.pages.ProfilePage;
 import com.ct.model.Customer;
@@ -27,7 +28,7 @@ public class ProductAddTest extends BaseTest {
     public void setUp() {
         loginPage = new LoginPage(driver);
         profilePage = new ProfilePage(driver);
-        customer = Customer.newBuilder().withEmail("svitlana8@gmail.com").withPassword("passw0rd").build();
+        customer = Customer.newBuilder().withEmail(TestConfig.CONFIG.userEmail()).withPassword(TestConfig.CONFIG.userPassword()).build();
         applePomaceProduct = Product.newBuilder().withName("Apple Pomace").withPrice(0.89).build();
         juiceShopCoasterProduct = Product.newBuilder().withName("OWASP Juice Shop Coaster").build();
         loginPage.openPage();

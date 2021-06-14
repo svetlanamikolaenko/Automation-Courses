@@ -2,6 +2,7 @@ package com.ct.framework.driver;
 
 import com.ct.framework.config.TestConfig;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -76,11 +77,13 @@ public class WebDriverRunner {
             }
             driver.get().manage().window().maximize();
         }
+
         return driver.get();
     }
 
     public static void closeWebDriver(){
         if (driver.get() != null){
+            driver.get().manage().deleteAllCookies();
             driver.get().quit();
             driver.remove();
         }

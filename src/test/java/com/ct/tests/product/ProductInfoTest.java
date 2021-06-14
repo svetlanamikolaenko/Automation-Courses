@@ -21,6 +21,7 @@ public class ProductInfoTest extends BaseTest {
     public void setUp() {
         product = Product.newBuilder().withName("Banana Juice (1000ml)").withDescription("Monkeys love it the most.").withPrice(1.99).withImage("http://beeb0b73705f.sn.mynetname.net:3000/assets/public/images/products/banana_juice.jpg").build();
         profilePage = new ProfilePage(driver);
+        profilePage.openPage();
     }
     @Test
     @Feature("Actual product item information in All Products")
