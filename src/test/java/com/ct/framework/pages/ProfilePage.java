@@ -64,7 +64,7 @@ public class ProfilePage extends AbstractPage {
     private String addToBasketMessage = "//span[contains(.,'%s')]";
     private String addToBasketButton = item + "//ancestor::figure//button[@aria-label='Add to Basket']";
     private String itemInBasket = "//mat-cell[contains(.,'%s')]";
-    private String removeItemFromBasket = itemInBasket + "//following-sibling::mat-cell[last()]";
+    private String removeItemFromBasket = itemInBasket + "//following-sibling::mat-cell[last()]/button";
     private final String profilePageHeading = "All Products";
 
     public ProfilePage(WebDriver driver) {

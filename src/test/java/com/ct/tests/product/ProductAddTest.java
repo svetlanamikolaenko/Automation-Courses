@@ -37,7 +37,6 @@ public class ProductAddTest extends BaseTest {
 
     @AfterMethod
     public void clearLocalStorage() {
-        profilePage.removeProductFromBasket(applePomaceProduct.getName());
         loginPage.logout();
     }
 
@@ -79,6 +78,7 @@ public class ProductAddTest extends BaseTest {
     @Test
     @Feature("Customer can click on Product Item")
     public void verifyClickingOnProductItem(){
+        profilePage.openPage();
         Assert.assertTrue(profilePage.profilePageHeadingIsDisplayed());
         profilePage.clickOnProductItem(applePomaceProduct.getName());
         Assert.assertEquals(profilePage.getNameInCard(), applePomaceProduct.getName());

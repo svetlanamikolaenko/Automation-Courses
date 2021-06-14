@@ -1,5 +1,6 @@
 package com.ct.tests.signup;
 
+import com.ct.framework.config.TestConfig;
 import com.ct.framework.pages.LoginPage;
 import com.ct.framework.pages.RegistrationPage;
 import com.ct.model.Customer;
@@ -23,8 +24,7 @@ public class RegistrationFieldsErrorsTest extends BaseTest {
     @BeforeMethod
     public void openSignUpPage() {
         faker = new Faker();
-        customer = Customer.newBuilder().withEmail("svitlana8@gmail.com").withPassword("passw0rd").build();
-
+        customer = Customer.newBuilder().withEmail(TestConfig.CONFIG.userEmail()).withPassword(TestConfig.CONFIG.userPassword()).build();
         registrationPage = new RegistrationPage(driver);
         registrationPage.openPage();
         loginPage = new LoginPage(driver);
