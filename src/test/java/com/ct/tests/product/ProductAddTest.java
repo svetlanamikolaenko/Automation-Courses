@@ -37,6 +37,7 @@ public class ProductAddTest extends BaseTest {
 
     @AfterMethod
     public void clearLocalStorage() {
+        profilePage.removeProductFromBasket(applePomaceProduct.getName());
         loginPage.logout();
     }
 
