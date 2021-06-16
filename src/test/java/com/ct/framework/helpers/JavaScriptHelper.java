@@ -16,6 +16,9 @@ public class JavaScriptHelper {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
                 element);
     }
+    public void allElementsLoaded(){
+        ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+    }
 
     public void scrollIntoView(WebElement element){
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)",

@@ -13,7 +13,7 @@ public abstract class AbstractPage {
     protected WebDriverWait wait;
     protected final int TIME_OUT = 10;
     protected final String BASE_PAGE = TestConfig.CONFIG.baseUrl();
-    Faker faker;
+    protected Faker faker;
     protected JavaScriptHelper javaScriptHelper;
     protected Actions actions;
 
@@ -34,8 +34,17 @@ public abstract class AbstractPage {
     public void waitUntilTextToBePresent(WebElement element, String text){
         wait.until(ExpectedConditions.textToBePresentInElement(element,text));
     }
+
     public void waitLocatorUntilVisible(String locator){
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
+    }
+
+   public void waitLocatorUntilInvisible(String locator){
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(locator)));
+    }
+
+     public void waitElementUntilInvisible(WebElement element){
+        wait.until(ExpectedConditions.invisibilityOf(element));
     }
 
     public WebElement findElementByXpath(String text){
