@@ -2,4 +2,5 @@
 /.idea/
 /target/
 *.iml
-.allure/
+/.allure/
+/allure-results/
